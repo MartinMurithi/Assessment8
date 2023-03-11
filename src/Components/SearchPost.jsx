@@ -13,7 +13,7 @@ function SearchPost() {
 
     const handleSearch = () => {
         let post = data.find(post => post.id === parseInt(searchId, 10));
-        {post ? setPost(post) : <h3>No post with such id</h3>}
+        setPost(post)
         
         setSearchId("");
     }
