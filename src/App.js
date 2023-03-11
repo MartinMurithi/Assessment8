@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Home from "./Components/Home";
+import Posts from "./Components/Posts";
+import { Routes, Route } from "react-router-dom";
+import { createContext, useState, useEffect } from "react";
+import axios from 'axios'
+import SearchPost from "./Components/SearchPost";
+
+export const PostsContext = createContext([]);
 
 function App() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        let response = await axios.get(" https://dummyjson.com/posts");
+        setPosts(response.data.posts);
+        console.log(response.data.posts);
+      } catch (error) {
+        console.log(`Error is ${error}`);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <PostsContext.Provider value={posts}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/posts" element={<Posts />} />
+        <Route path="/searchpost" element={<SearchPost />} >
+        </Route>
+      </Routes>
+    </PostsContext.Provider>
   );
 }
 
